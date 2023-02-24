@@ -1,0 +1,75 @@
+{
+    "automappingRulesFile": "",
+    "commands": [
+    ],
+    "extensionsPath": "extensions",
+    "folders": [
+        "."
+    ],
+    "propertyTypes": [
+        {
+            "color": "#ff0000ff",
+            "id": 6,
+            "members": [
+            ],
+            "name": "Room",
+            "type": "class",
+            "useAs": [
+                "object"
+            ]
+        },
+        {
+            "color": "#ff00ff00",
+            "id": 8,
+            "members": [
+                {
+                    "name": "Room",
+                    "type": "object",
+                    "value": 0
+                },
+                {
+                    "name": "PreviousTileset",
+                    "type": "int",
+                    "value": 0
+                }
+            ],
+            "name": "TeleportDest",
+            "type": "class",
+            "useAs": [
+                "object"
+            ]
+        },
+        {
+            "color": "#ffa0a0a4",
+            "id": 7,
+            "members": [
+                {
+                    "name": "Destination",
+                    "type": "object",
+                    "value": 0
+                }
+            ],
+            "name": "TeleportRoom",
+            "type": "class",
+            "useAs": [
+                "object"
+            ]
+        },
+        {
+            "color": "#ffa0a0a4",
+            "id": 9,
+            "members": [
+                {
+                    "name": "ID",
+                    "type": "int",
+                    "value": 0
+                }
+            ],
+            "name": "Zone",
+            "type": "class",
+            "useAs": [
+                "layer"
+            ]
+        }
+    ]
+}
