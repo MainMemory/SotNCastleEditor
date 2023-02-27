@@ -5,6 +5,10 @@ VisualStudioVersion = 16.0.32630.194
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SotNCastleEditor", "SotNCastleEditor\SotNCastleEditor.csproj", "{D4FC659A-7FE3-48C9-8762-453276441617}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SotNData", "SotNData\SotNData.csproj", "{C6D9D07E-93DE-40B5-8BC0-07B9CFD45C6C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SotNCastlePatcher", "SotNCastlePatcher\SotNCastlePatcher.csproj", "{94364A35-5667-4EA6-9F1A-7408A4CA6C20}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +19,14 @@ Global
 		{D4FC659A-7FE3-48C9-8762-453276441617}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D4FC659A-7FE3-48C9-8762-453276441617}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D4FC659A-7FE3-48C9-8762-453276441617}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C6D9D07E-93DE-40B5-8BC0-07B9CFD45C6C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C6D9D07E-93DE-40B5-8BC0-07B9CFD45C6C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C6D9D07E-93DE-40B5-8BC0-07B9CFD45C6C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C6D9D07E-93DE-40B5-8BC0-07B9CFD45C6C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{94364A35-5667-4EA6-9F1A-7408A4CA6C20}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{94364A35-5667-4EA6-9F1A-7408A4CA6C20}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{94364A35-5667-4EA6-9F1A-7408A4CA6C20}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{94364A35-5667-4EA6-9F1A-7408A4CA6C20}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -46,7 +46,6 @@
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BitmapBits.cs" />
     <Compile Include="BufferedPanel.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -95,6 +94,12 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="castle.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\SotNData\SotNData.csproj">
+      <Project>{C6D9D07E-93DE-40B5-8BC0-07B9CFD45C6C}</Project>
+      <Name>SotNData</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

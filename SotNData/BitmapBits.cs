@@ -6,7 +6,7 @@ using System.Runtime.InteropServices;
 using System.IO;
 using System.Linq;
 
-namespace SotNCastleEditor
+namespace SotNData
 {
 	[Serializable]
 	/// <summary>
@@ -232,11 +232,19 @@ namespace SotNCastleEditor
 		private void ToBitmap4bppInternal(Bitmap destination)
 		{
 			BitmapData newbmpd = destination.LockBits(new Rectangle(0, 0, Width, Height), ImageLockMode.WriteOnly, PixelFormat.Format4bppIndexed);
-			byte[] bmpbits = new byte[Math.Abs(newbmpd.Stride) * newbmpd.Height];
+			int stride = Math.Abs(newbmpd.Stride);
+			byte[] bmpbits = new byte[stride * newbmpd.Height];
+			To4bppInternal(bmpbits, stride);
+			Marshal.Copy(bmpbits, 0, newbmpd.Scan0, bmpbits.Length);
+			destination.UnlockBits(newbmpd);
+		}
+
+		private void To4bppInternal(byte[] bmpbits, int stride)
+		{
 			int srcaddr = 0;
 			for (int y = 0; y < Height; y++)
 			{
-				int dstaddr = y * Math.Abs(newbmpd.Stride);
+				int dstaddr = y * stride;
 				for (int x = 0; x < Width; x += 2)
 				{
 					byte px = (byte)((Bits[srcaddr++] & 0xF) << 4);
@@ -245,8 +253,6 @@ namespace SotNCastleEditor
 					bmpbits[dstaddr++] = px;
 				}
 			}
-			Marshal.Copy(bmpbits, 0, newbmpd.Scan0, bmpbits.Length);
-			destination.UnlockBits(newbmpd);
 		}
 
 		public Bitmap ToBitmap4bpp(ColorPalette palette)
@@ -1051,6 +1057,13 @@ namespace SotNCastleEditor
 			for (int i = 0; i < 256; i++)
 				palette[i] = Color.FromArgb(br.ReadByte(), br.ReadByte(), br.ReadByte());
 			return pix;
+		}
+
+		public byte[] GetPixels4bpp()
+		{
+			byte[] result = new byte[Width / 2 * Height];
+			To4bppInternal(result, Width / 2);
+			return result;
 		}
 	}
 }

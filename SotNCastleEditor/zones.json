@@ -4,7 +4,6 @@
       "Name": "Marble Gallery",
       "ID": 0,
       "Map": 1,
-      "Offset": 76519992,
       "Rooms": [
         {
           "X": 21,
@@ -1255,7 +1254,6 @@
       "Name": "Outer Wall",
       "ID": 1,
       "Map": 1,
-      "Offset": 77404344,
       "Rooms": [
         {
           "X": 60,
@@ -1895,7 +1893,6 @@
       "Name": "Long Library",
       "ID": 2,
       "Map": 1,
-      "Offset": 75111144,
       "Rooms": [
         {
           "X": 44,
@@ -2553,7 +2550,6 @@
       "Name": "Catacombs",
       "ID": 3,
       "Map": 1,
-      "Offset": 71891256,
       "Rooms": [
         {
           "X": 16,
@@ -3424,7 +3420,6 @@
       "Name": "Olrox's Quarters",
       "ID": 4,
       "Map": 1,
-      "Offset": 78251064,
       "Rooms": [
         {
           "X": 29,
@@ -4343,7 +4338,6 @@
       "Name": "Abandoned Mine",
       "ID": 5,
       "Map": 1,
-      "Offset": 73304808,
       "Rooms": [
         {
           "X": 27,
@@ -4856,7 +4850,6 @@
       "Name": "Royal Chapel",
       "ID": 6,
       "Map": 1,
-      "Offset": 73883400,
       "Rooms": [
         {
           "X": 8,
@@ -5896,7 +5889,6 @@
       "Name": "Castle Entrance",
       "ID": 7,
       "Map": 1,
-      "Offset": 88033032,
       "Rooms": [
         {
           "X": 2,
@@ -6702,7 +6694,6 @@
       "Name": "Castle Center",
       "ID": 8,
       "Map": 1,
-      "Offset": 72728568,
       "Rooms": [
         {
           "X": 32,
@@ -6849,7 +6840,6 @@
       "Name": "Underground Caverns",
       "ID": 9,
       "Map": 1,
-      "Offset": 79890408,
       "Rooms": [
         {
           "X": 39,
@@ -8487,7 +8477,6 @@
       "Name": "Colosseum",
       "ID": 10,
       "Map": 1,
-      "Offset": 71049240,
       "Rooms": [
         {
           "X": 19,
@@ -9089,7 +9078,6 @@
       "Name": "Castle Keep",
       "ID": 11,
       "Map": 1,
-      "Offset": 90236856,
       "Rooms": [
         {
           "X": 33,
@@ -9772,7 +9760,6 @@
       "Name": "Alchemy Laboratory",
       "ID": 12,
       "Map": 1,
-      "Offset": 88804488,
       "Rooms": [
         {
           "X": 13,
@@ -10758,7 +10745,6 @@
       "Name": "Clock Tower",
       "ID": 13,
       "Map": 1,
-      "Offset": 89597112,
       "Rooms": [
         {
           "X": 40,
@@ -11526,7 +11512,6 @@
       "Name": "Warp Rooms",
       "ID": 14,
       "Map": 1,
-      "Offset": 92812296,
       "Rooms": [
         {
           "X": 40,
@@ -11784,7 +11769,6 @@
       "Name": "Nightmare",
       "ID": 18,
       "Map": 2,
-      "Offset": 95364216,
       "Rooms": [
         {
           "X": 0,
@@ -11812,7 +11796,6 @@
       "Name": "Cerberus",
       "ID": 22,
       "Map": 2,
-      "Offset": 107688696,
       "Rooms": [
         {
           "X": 30,
@@ -11867,7 +11850,6 @@
       "Name": "Richter",
       "ID": 24,
       "Map": 2,
-      "Offset": 104506440,
       "Rooms": [
         {
           "X": 33,
@@ -11885,7 +11867,6 @@
       "Name": "Hippogryph",
       "ID": 25,
       "Map": 2,
-      "Offset": 103829064,
       "Rooms": [
         {
           "X": 23,
@@ -11940,7 +11921,6 @@
       "Name": "Doppleganger10",
       "ID": 26,
       "Map": 2,
-      "Offset": 103050552,
       "Rooms": [
         {
           "X": 57,
@@ -11995,7 +11975,6 @@
       "Name": "Scylla",
       "ID": 27,
       "Map": 2,
-      "Offset": 102391992,
       "Rooms": [
         {
           "X": 41,
@@ -12149,7 +12128,6 @@
       "Name": "Werewolf & Minotaur",
       "ID": 28,
       "Map": 2,
-      "Offset": 101698152,
       "Rooms": [
         {
           "X": 19,
@@ -12204,7 +12182,6 @@
       "Name": "Legion",
       "ID": 29,
       "Map": 2,
-      "Offset": 101112504,
       "Rooms": [
         {
           "X": 18,
@@ -12275,7 +12252,6 @@
       "Name": "Olrox",
       "ID": 30,
       "Map": 2,
-      "Offset": 100310472,
       "Rooms": [
         {
           "X": 19,
@@ -12346,7 +12322,6 @@
       "Name": "Final Stage: Bloodlines",
       "ID": 31,
       "Map": 0,
-      "Offset": 87289800,
       "Rooms": [
         {
           "X": 0,
@@ -12394,7 +12369,6 @@
       "Name": "Black Marble Gallery",
       "ID": 32,
       "Map": 3,
-      "Offset": 83380776,
       "Rooms": [
         {
           "X": 37,
@@ -13645,7 +13619,6 @@
       "Name": "Reverse Outer Wall",
       "ID": 33,
       "Map": 3,
-      "Offset": 84211032,
       "Rooms": [
         {
           "X": 3,
@@ -14285,7 +14258,6 @@
       "Name": "Forbidden Library",
       "ID": 34,
       "Map": 3,
-      "Offset": 82715160,
       "Rooms": [
         {
           "X": 15,
@@ -14943,7 +14915,6 @@
       "Name": "Floating Catacombs",
       "ID": 35,
       "Map": 3,
-      "Offset": 80715960,
       "Rooms": [
         {
           "X": 47,
@@ -15814,7 +15785,6 @@
       "Name": "Death Wing's Lair",
       "ID": 36,
       "Map": 3,
-      "Offset": 84900168,
       "Rooms": [
         {
           "X": 34,
@@ -16733,7 +16703,6 @@
       "Name": "Cave",
       "ID": 37,
       "Map": 3,
-      "Offset": 81414504,
       "Rooms": [
         {
           "X": 36,
@@ -17246,7 +17215,6 @@
       "Name": "Anti-Chapel",
       "ID": 38,
       "Map": 3,
-      "Offset": 81990744,
       "Rooms": [
         {
           "X": 54,
@@ -18286,7 +18254,6 @@
       "Name": "Reverse Entrance",
       "ID": 39,
       "Map": 3,
-      "Offset": 85641048,
       "Rooms": [
         {
           "X": 60,
@@ -19122,7 +19089,6 @@
       "Name": "Reverse Castle Center",
       "ID": 40,
       "Map": 3,
-      "Offset": 90954216,
       "Rooms": [
         {
           "X": 31,
@@ -19269,7 +19235,6 @@
       "Name": "Reverse Caverns",
       "ID": 41,
       "Map": 3,
-      "Offset": 86419560,
       "Rooms": [
         {
           "X": 24,
@@ -20907,7 +20872,6 @@
       "Name": "Reverse Colosseum",
       "ID": 42,
       "Map": 3,
-      "Offset": 91556328,
       "Rooms": [
         {
           "X": 43,
@@ -21509,7 +21473,6 @@
       "Name": "Reverse Castle Keep",
       "ID": 43,
       "Map": 3,
-      "Offset": 92141976,
       "Rooms": [
         {
           "X": 28,
@@ -22192,7 +22155,6 @@
       "Name": "Necromancy Laboratory",
       "ID": 44,
       "Map": 3,
-      "Offset": 93332088,
       "Rooms": [
         {
           "X": 50,
@@ -23178,7 +23140,6 @@
       "Name": "Reverse Clock Tower",
       "ID": 45,
       "Map": 3,
-      "Offset": 94089432,
       "Rooms": [
         {
           "X": 23,
@@ -23946,7 +23907,6 @@
       "Name": "Reverse Warp Rooms",
       "ID": 46,
       "Map": 3,
-      "Offset": 94823256,
       "Rooms": [
         {
           "X": 23,
@@ -24204,7 +24164,6 @@
       "Name": "Galamoth",
       "ID": 54,
       "Map": 4,
-      "Offset": 111538920,
       "Rooms": [
         {
           "X": 44,
@@ -24275,7 +24234,6 @@
       "Name": "Akmodan II",
       "ID": 55,
       "Map": 4,
-      "Offset": 110957976,
       "Rooms": [
         {
           "X": 43,
@@ -24346,7 +24304,6 @@
       "Name": "Dracula",
       "ID": 56,
       "Map": 4,
-      "Offset": 110278248,
       "Rooms": [
         {
           "X": 31,
@@ -24483,7 +24440,6 @@
       "Name": "Doppleganger40",
       "ID": 57,
       "Map": 4,
-      "Offset": 109450344,
       "Rooms": [
         {
           "X": 23,
@@ -24531,7 +24487,6 @@
       "Name": "Creature",
       "ID": 58,
       "Map": 4,
-      "Offset": 108855288,
       "Rooms": [
         {
           "X": 5,
@@ -24586,7 +24541,6 @@
       "Name": "Medusa",
       "ID": 59,
       "Map": 4,
-      "Offset": 108274344,
       "Rooms": [
         {
           "X": 39,
@@ -24641,7 +24595,6 @@
       "Name": "Death",
       "ID": 60,
       "Map": 4,
-      "Offset": 107088936,
       "Rooms": [
         {
           "X": 32,
@@ -24696,7 +24649,6 @@
       "Name": "Beezlebub",
       "ID": 61,
       "Map": 4,
-      "Offset": 106498584,
       "Rooms": [
         {
           "X": 51,
@@ -24805,7 +24757,6 @@
       "Name": "Trio",
       "ID": 62,
       "Map": 4,
-      "Offset": 105317880,
       "Rooms": [
         {
           "X": 43,
@@ -24860,7 +24811,6 @@
       "Name": "Castle Entrance First Visit",
       "ID": 65,
       "Map": 1,
-      "Offset": 79062504,
       "Rooms": [
         {
           "X": 2,
