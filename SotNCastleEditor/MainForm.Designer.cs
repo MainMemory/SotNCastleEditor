@@ -52,7 +52,6 @@ namespace SotNCastleEditor
 			this.tabPage1 = new System.Windows.Forms.TabPage();
 			this.splitContainer1 = new System.Windows.Forms.SplitContainer();
 			this.layoutContainerPanel = new System.Windows.Forms.Panel();
-			this.layoutPanel = new SotNCastleEditor.BufferedPanel();
 			this.tileBottomSelector = new System.Windows.Forms.ComboBox();
 			this.label5 = new System.Windows.Forms.Label();
 			this.tileRightSelector = new System.Windows.Forms.ComboBox();
@@ -70,9 +69,9 @@ namespace SotNCastleEditor
 			this.layoutAreaSelect = new System.Windows.Forms.ToolStripComboBox();
 			this.moveWholeAreaButton = new System.Windows.Forms.ToolStripButton();
 			this.tabPage3 = new System.Windows.Forms.TabPage();
+			this.teleportPrevTSSelect = new System.Windows.Forms.ComboBox();
 			this.showReverseCastleCheckBox = new System.Windows.Forms.CheckBox();
 			this.panel2 = new System.Windows.Forms.Panel();
-			this.teleportPreview = new SotNCastleEditor.BufferedPanel();
 			this.teleportYCoord = new System.Windows.Forms.NumericUpDown();
 			this.label10 = new System.Windows.Forms.Label();
 			this.teleportXCoord = new System.Windows.Forms.NumericUpDown();
@@ -86,7 +85,25 @@ namespace SotNCastleEditor
 			this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
 			this.editTeleportDestToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.moveTeleportDestHereToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.teleportPrevTSSelect = new System.Windows.Forms.ComboBox();
+			this.tabPage2 = new System.Windows.Forms.TabPage();
+			this.panel3 = new System.Windows.Forms.Panel();
+			this.bossTeleYCoord = new System.Windows.Forms.NumericUpDown();
+			this.label11 = new System.Windows.Forms.Label();
+			this.bossTeleXCoord = new System.Windows.Forms.NumericUpDown();
+			this.label12 = new System.Windows.Forms.Label();
+			this.bossTeleRoomSelect = new System.Windows.Forms.NumericUpDown();
+			this.label14 = new System.Windows.Forms.Label();
+			this.bossTeleAreaSelect = new System.Windows.Forms.ComboBox();
+			this.label15 = new System.Windows.Forms.Label();
+			this.bossTeleListBox = new System.Windows.Forms.ListBox();
+			this.bossTeleBossSelect = new System.Windows.Forms.NumericUpDown();
+			this.label13 = new System.Windows.Forms.Label();
+			this.bossTeleViewDest = new System.Windows.Forms.Button();
+			this.showBossTeleportsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.layoutPanel = new SotNCastleEditor.BufferedPanel();
+			this.teleportPreview = new SotNCastleEditor.BufferedPanel();
+			this.bossTelePreview = new SotNCastleEditor.BufferedPanel();
+			this.editBossTeleportToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.menuStrip1.SuspendLayout();
 			this.tabControl1.SuspendLayout();
 			this.tabPage1.SuspendLayout();
@@ -104,6 +121,12 @@ namespace SotNCastleEditor
 			((System.ComponentModel.ISupportInitialize)(this.teleportXCoord)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.teleportRoomSelect)).BeginInit();
 			this.contextMenuStrip1.SuspendLayout();
+			this.tabPage2.SuspendLayout();
+			this.panel3.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this.bossTeleYCoord)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.bossTeleXCoord)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.bossTeleRoomSelect)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.bossTeleBossSelect)).BeginInit();
 			this.SuspendLayout();
 			// 
 			// menuStrip1
@@ -198,6 +221,7 @@ namespace SotNCastleEditor
             this.showBorderToolStripMenuItem,
             this.showGridToolStripMenuItem,
             this.showOtherAreasToolStripMenuItem,
+            this.showBossTeleportsToolStripMenuItem,
             this.showTeleportDestsToolStripMenuItem});
 			this.viewToolStripMenuItem.Name = "viewToolStripMenuItem";
 			this.viewToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
@@ -282,6 +306,7 @@ namespace SotNCastleEditor
 			// 
 			this.tabControl1.Controls.Add(this.tabPage1);
 			this.tabControl1.Controls.Add(this.tabPage3);
+			this.tabControl1.Controls.Add(this.tabPage2);
 			this.tabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tabControl1.Location = new System.Drawing.Point(0, 24);
 			this.tabControl1.Name = "tabControl1";
@@ -339,18 +364,6 @@ namespace SotNCastleEditor
 			this.layoutContainerPanel.Name = "layoutContainerPanel";
 			this.layoutContainerPanel.Size = new System.Drawing.Size(554, 369);
 			this.layoutContainerPanel.TabIndex = 1;
-			// 
-			// layoutPanel
-			// 
-			this.layoutPanel.Location = new System.Drawing.Point(0, 0);
-			this.layoutPanel.Margin = new System.Windows.Forms.Padding(0);
-			this.layoutPanel.Name = "layoutPanel";
-			this.layoutPanel.Size = new System.Drawing.Size(16384, 16384);
-			this.layoutPanel.TabIndex = 0;
-			this.layoutPanel.Paint += new System.Windows.Forms.PaintEventHandler(this.layoutPanel_Paint);
-			this.layoutPanel.MouseDown += new System.Windows.Forms.MouseEventHandler(this.layoutPanel_MouseDown);
-			this.layoutPanel.MouseMove += new System.Windows.Forms.MouseEventHandler(this.layoutPanel_MouseMove);
-			this.layoutPanel.MouseUp += new System.Windows.Forms.MouseEventHandler(this.layoutPanel_MouseUp);
 			// 
 			// tileBottomSelector
 			// 
@@ -566,8 +579,18 @@ namespace SotNCastleEditor
 			this.tabPage3.Padding = new System.Windows.Forms.Padding(3);
 			this.tabPage3.Size = new System.Drawing.Size(792, 400);
 			this.tabPage3.TabIndex = 2;
-			this.tabPage3.Text = "Teleports";
+			this.tabPage3.Text = "Teleport Dests";
 			this.tabPage3.UseVisualStyleBackColor = true;
+			// 
+			// teleportPrevTSSelect
+			// 
+			this.teleportPrevTSSelect.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.teleportPrevTSSelect.FormattingEnabled = true;
+			this.teleportPrevTSSelect.Location = new System.Drawing.Point(240, 59);
+			this.teleportPrevTSSelect.Name = "teleportPrevTSSelect";
+			this.teleportPrevTSSelect.Size = new System.Drawing.Size(144, 21);
+			this.teleportPrevTSSelect.TabIndex = 6;
+			this.teleportPrevTSSelect.SelectedIndexChanged += new System.EventHandler(this.teleportPrevTSSelect_SelectedIndexChanged);
 			// 
 			// showReverseCastleCheckBox
 			// 
@@ -591,17 +614,6 @@ namespace SotNCastleEditor
 			this.panel2.Name = "panel2";
 			this.panel2.Size = new System.Drawing.Size(396, 388);
 			this.panel2.TabIndex = 11;
-			// 
-			// teleportPreview
-			// 
-			this.teleportPreview.Location = new System.Drawing.Point(0, 0);
-			this.teleportPreview.Name = "teleportPreview";
-			this.teleportPreview.Size = new System.Drawing.Size(200, 100);
-			this.teleportPreview.TabIndex = 12;
-			this.teleportPreview.Paint += new System.Windows.Forms.PaintEventHandler(this.teleportPreview_Paint);
-			this.teleportPreview.MouseClick += new System.Windows.Forms.MouseEventHandler(this.teleportPreview_MouseClick);
-			this.teleportPreview.MouseLeave += new System.EventHandler(this.teleportPreview_MouseLeave);
-			this.teleportPreview.MouseMove += new System.Windows.Forms.MouseEventHandler(this.teleportPreview_MouseMove);
 			// 
 			// teleportYCoord
 			// 
@@ -713,10 +725,11 @@ namespace SotNCastleEditor
 			// 
 			this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.editTeleportDestToolStripMenuItem,
-            this.moveTeleportDestHereToolStripMenuItem});
+            this.moveTeleportDestHereToolStripMenuItem,
+            this.editBossTeleportToolStripMenuItem});
 			this.contextMenuStrip1.Name = "contextMenuStrip1";
 			this.contextMenuStrip1.RenderMode = System.Windows.Forms.ToolStripRenderMode.System;
-			this.contextMenuStrip1.Size = new System.Drawing.Size(204, 48);
+			this.contextMenuStrip1.Size = new System.Drawing.Size(204, 70);
 			// 
 			// editTeleportDestToolStripMenuItem
 			// 
@@ -732,15 +745,217 @@ namespace SotNCastleEditor
 			this.moveTeleportDestHereToolStripMenuItem.Text = "Move Teleport Dest Here";
 			this.moveTeleportDestHereToolStripMenuItem.Click += new System.EventHandler(this.moveTeleportDestHereToolStripMenuItem_Click);
 			// 
-			// teleportPrevTSSelect
+			// tabPage2
 			// 
-			this.teleportPrevTSSelect.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.teleportPrevTSSelect.FormattingEnabled = true;
-			this.teleportPrevTSSelect.Location = new System.Drawing.Point(240, 59);
-			this.teleportPrevTSSelect.Name = "teleportPrevTSSelect";
-			this.teleportPrevTSSelect.Size = new System.Drawing.Size(144, 21);
-			this.teleportPrevTSSelect.TabIndex = 6;
-			this.teleportPrevTSSelect.SelectedIndexChanged += new System.EventHandler(this.teleportPrevTSSelect_SelectedIndexChanged);
+			this.tabPage2.Controls.Add(this.bossTeleViewDest);
+			this.tabPage2.Controls.Add(this.bossTeleBossSelect);
+			this.tabPage2.Controls.Add(this.label13);
+			this.tabPage2.Controls.Add(this.panel3);
+			this.tabPage2.Controls.Add(this.bossTeleYCoord);
+			this.tabPage2.Controls.Add(this.label11);
+			this.tabPage2.Controls.Add(this.bossTeleXCoord);
+			this.tabPage2.Controls.Add(this.label12);
+			this.tabPage2.Controls.Add(this.bossTeleRoomSelect);
+			this.tabPage2.Controls.Add(this.label14);
+			this.tabPage2.Controls.Add(this.bossTeleAreaSelect);
+			this.tabPage2.Controls.Add(this.label15);
+			this.tabPage2.Controls.Add(this.bossTeleListBox);
+			this.tabPage2.Location = new System.Drawing.Point(4, 22);
+			this.tabPage2.Name = "tabPage2";
+			this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
+			this.tabPage2.Size = new System.Drawing.Size(792, 400);
+			this.tabPage2.TabIndex = 3;
+			this.tabPage2.Text = "Boss Teleports";
+			this.tabPage2.UseVisualStyleBackColor = true;
+			// 
+			// panel3
+			// 
+			this.panel3.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.panel3.AutoScroll = true;
+			this.panel3.Controls.Add(this.bossTelePreview);
+			this.panel3.Location = new System.Drawing.Point(390, 6);
+			this.panel3.Name = "panel3";
+			this.panel3.Size = new System.Drawing.Size(396, 388);
+			this.panel3.TabIndex = 24;
+			// 
+			// bossTeleYCoord
+			// 
+			this.bossTeleYCoord.Location = new System.Drawing.Point(306, 85);
+			this.bossTeleYCoord.Maximum = new decimal(new int[] {
+            32767,
+            0,
+            0,
+            0});
+			this.bossTeleYCoord.Name = "bossTeleYCoord";
+			this.bossTeleYCoord.Size = new System.Drawing.Size(78, 20);
+			this.bossTeleYCoord.TabIndex = 23;
+			this.bossTeleYCoord.ValueChanged += new System.EventHandler(this.bossTeleYCoord_ValueChanged);
+			// 
+			// label11
+			// 
+			this.label11.AutoSize = true;
+			this.label11.Location = new System.Drawing.Point(165, 87);
+			this.label11.Name = "label11";
+			this.label11.Size = new System.Drawing.Size(17, 13);
+			this.label11.TabIndex = 22;
+			this.label11.Text = "Y:";
+			// 
+			// bossTeleXCoord
+			// 
+			this.bossTeleXCoord.Location = new System.Drawing.Point(306, 59);
+			this.bossTeleXCoord.Maximum = new decimal(new int[] {
+            32767,
+            0,
+            0,
+            0});
+			this.bossTeleXCoord.Name = "bossTeleXCoord";
+			this.bossTeleXCoord.Size = new System.Drawing.Size(78, 20);
+			this.bossTeleXCoord.TabIndex = 21;
+			this.bossTeleXCoord.ValueChanged += new System.EventHandler(this.bossTeleXCoord_ValueChanged);
+			// 
+			// label12
+			// 
+			this.label12.AutoSize = true;
+			this.label12.Location = new System.Drawing.Point(165, 61);
+			this.label12.Name = "label12";
+			this.label12.Size = new System.Drawing.Size(17, 13);
+			this.label12.TabIndex = 20;
+			this.label12.Text = "X:";
+			// 
+			// bossTeleRoomSelect
+			// 
+			this.bossTeleRoomSelect.Location = new System.Drawing.Point(306, 33);
+			this.bossTeleRoomSelect.Maximum = new decimal(new int[] {
+            255,
+            0,
+            0,
+            0});
+			this.bossTeleRoomSelect.Name = "bossTeleRoomSelect";
+			this.bossTeleRoomSelect.Size = new System.Drawing.Size(78, 20);
+			this.bossTeleRoomSelect.TabIndex = 17;
+			this.bossTeleRoomSelect.ValueChanged += new System.EventHandler(this.bossTeleRoomSelect_ValueChanged);
+			// 
+			// label14
+			// 
+			this.label14.AutoSize = true;
+			this.label14.Location = new System.Drawing.Point(165, 35);
+			this.label14.Name = "label14";
+			this.label14.Size = new System.Drawing.Size(38, 13);
+			this.label14.TabIndex = 16;
+			this.label14.Text = "Room:";
+			// 
+			// bossTeleAreaSelect
+			// 
+			this.bossTeleAreaSelect.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.bossTeleAreaSelect.FormattingEnabled = true;
+			this.bossTeleAreaSelect.Location = new System.Drawing.Point(203, 6);
+			this.bossTeleAreaSelect.Name = "bossTeleAreaSelect";
+			this.bossTeleAreaSelect.Size = new System.Drawing.Size(181, 21);
+			this.bossTeleAreaSelect.TabIndex = 15;
+			this.bossTeleAreaSelect.SelectedIndexChanged += new System.EventHandler(this.bossTeleAreaSelect_SelectedIndexChanged);
+			// 
+			// label15
+			// 
+			this.label15.AutoSize = true;
+			this.label15.Location = new System.Drawing.Point(165, 9);
+			this.label15.Name = "label15";
+			this.label15.Size = new System.Drawing.Size(32, 13);
+			this.label15.TabIndex = 14;
+			this.label15.Text = "Area:";
+			// 
+			// bossTeleListBox
+			// 
+			this.bossTeleListBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
+			this.bossTeleListBox.FormattingEnabled = true;
+			this.bossTeleListBox.IntegralHeight = false;
+			this.bossTeleListBox.Location = new System.Drawing.Point(6, 6);
+			this.bossTeleListBox.Name = "bossTeleListBox";
+			this.bossTeleListBox.Size = new System.Drawing.Size(153, 388);
+			this.bossTeleListBox.TabIndex = 13;
+			this.bossTeleListBox.SelectedIndexChanged += new System.EventHandler(this.bossTeleListBox_SelectedIndexChanged);
+			// 
+			// bossTeleBossSelect
+			// 
+			this.bossTeleBossSelect.Location = new System.Drawing.Point(306, 111);
+			this.bossTeleBossSelect.Maximum = new decimal(new int[] {
+            255,
+            0,
+            0,
+            0});
+			this.bossTeleBossSelect.Name = "bossTeleBossSelect";
+			this.bossTeleBossSelect.Size = new System.Drawing.Size(78, 20);
+			this.bossTeleBossSelect.TabIndex = 26;
+			this.bossTeleBossSelect.ValueChanged += new System.EventHandler(this.bossTeleBossSelect_ValueChanged);
+			// 
+			// label13
+			// 
+			this.label13.AutoSize = true;
+			this.label13.Location = new System.Drawing.Point(165, 113);
+			this.label13.Name = "label13";
+			this.label13.Size = new System.Drawing.Size(33, 13);
+			this.label13.TabIndex = 25;
+			this.label13.Text = "Boss:";
+			// 
+			// bossTeleViewDest
+			// 
+			this.bossTeleViewDest.AutoSize = true;
+			this.bossTeleViewDest.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+			this.bossTeleViewDest.Location = new System.Drawing.Point(288, 137);
+			this.bossTeleViewDest.Name = "bossTeleViewDest";
+			this.bossTeleViewDest.Size = new System.Drawing.Size(96, 23);
+			this.bossTeleViewDest.TabIndex = 27;
+			this.bossTeleViewDest.Text = "View Destination";
+			this.bossTeleViewDest.UseVisualStyleBackColor = true;
+			this.bossTeleViewDest.Click += new System.EventHandler(this.bossTeleViewDest_Click);
+			// 
+			// showBossTeleportsToolStripMenuItem
+			// 
+			this.showBossTeleportsToolStripMenuItem.CheckOnClick = true;
+			this.showBossTeleportsToolStripMenuItem.Name = "showBossTeleportsToolStripMenuItem";
+			this.showBossTeleportsToolStripMenuItem.Size = new System.Drawing.Size(186, 22);
+			this.showBossTeleportsToolStripMenuItem.Text = "Show Boss Tele&ports";
+			this.showBossTeleportsToolStripMenuItem.CheckedChanged += new System.EventHandler(this.ViewOption_CheckedChanged);
+			// 
+			// layoutPanel
+			// 
+			this.layoutPanel.Location = new System.Drawing.Point(0, 0);
+			this.layoutPanel.Margin = new System.Windows.Forms.Padding(0);
+			this.layoutPanel.Name = "layoutPanel";
+			this.layoutPanel.Size = new System.Drawing.Size(16384, 16384);
+			this.layoutPanel.TabIndex = 0;
+			this.layoutPanel.Paint += new System.Windows.Forms.PaintEventHandler(this.layoutPanel_Paint);
+			this.layoutPanel.MouseDown += new System.Windows.Forms.MouseEventHandler(this.layoutPanel_MouseDown);
+			this.layoutPanel.MouseMove += new System.Windows.Forms.MouseEventHandler(this.layoutPanel_MouseMove);
+			this.layoutPanel.MouseUp += new System.Windows.Forms.MouseEventHandler(this.layoutPanel_MouseUp);
+			// 
+			// teleportPreview
+			// 
+			this.teleportPreview.Location = new System.Drawing.Point(0, 0);
+			this.teleportPreview.Name = "teleportPreview";
+			this.teleportPreview.Size = new System.Drawing.Size(200, 100);
+			this.teleportPreview.TabIndex = 12;
+			this.teleportPreview.Paint += new System.Windows.Forms.PaintEventHandler(this.teleportPreview_Paint);
+			this.teleportPreview.MouseClick += new System.Windows.Forms.MouseEventHandler(this.teleportPreview_MouseClick);
+			this.teleportPreview.MouseLeave += new System.EventHandler(this.teleportPreview_MouseLeave);
+			this.teleportPreview.MouseMove += new System.Windows.Forms.MouseEventHandler(this.teleportPreview_MouseMove);
+			// 
+			// bossTelePreview
+			// 
+			this.bossTelePreview.Location = new System.Drawing.Point(0, 0);
+			this.bossTelePreview.Name = "bossTelePreview";
+			this.bossTelePreview.Size = new System.Drawing.Size(200, 100);
+			this.bossTelePreview.TabIndex = 12;
+			this.bossTelePreview.Paint += new System.Windows.Forms.PaintEventHandler(this.bossTelePreview_Paint);
+			// 
+			// editBossTeleportToolStripMenuItem
+			// 
+			this.editBossTeleportToolStripMenuItem.Name = "editBossTeleportToolStripMenuItem";
+			this.editBossTeleportToolStripMenuItem.Size = new System.Drawing.Size(203, 22);
+			this.editBossTeleportToolStripMenuItem.Text = "Edit Boss Teleport...";
+			this.editBossTeleportToolStripMenuItem.Click += new System.EventHandler(this.editBossTeleportToolStripMenuItem_Click);
 			// 
 			// MainForm
 			// 
@@ -776,6 +991,13 @@ namespace SotNCastleEditor
 			((System.ComponentModel.ISupportInitialize)(this.teleportXCoord)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.teleportRoomSelect)).EndInit();
 			this.contextMenuStrip1.ResumeLayout(false);
+			this.tabPage2.ResumeLayout(false);
+			this.tabPage2.PerformLayout();
+			this.panel3.ResumeLayout(false);
+			((System.ComponentModel.ISupportInitialize)(this.bossTeleYCoord)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.bossTeleXCoord)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.bossTeleRoomSelect)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.bossTeleBossSelect)).EndInit();
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -839,6 +1061,23 @@ namespace SotNCastleEditor
 		private System.Windows.Forms.ToolStripMenuItem moveTeleportDestHereToolStripMenuItem;
 		private System.Windows.Forms.CheckBox showReverseCastleCheckBox;
 		private System.Windows.Forms.ComboBox teleportPrevTSSelect;
+		private System.Windows.Forms.TabPage tabPage2;
+		private System.Windows.Forms.Panel panel3;
+		private BufferedPanel bossTelePreview;
+		private System.Windows.Forms.NumericUpDown bossTeleYCoord;
+		private System.Windows.Forms.Label label11;
+		private System.Windows.Forms.NumericUpDown bossTeleXCoord;
+		private System.Windows.Forms.Label label12;
+		private System.Windows.Forms.NumericUpDown bossTeleRoomSelect;
+		private System.Windows.Forms.Label label14;
+		private System.Windows.Forms.ComboBox bossTeleAreaSelect;
+		private System.Windows.Forms.Label label15;
+		private System.Windows.Forms.ListBox bossTeleListBox;
+		private System.Windows.Forms.NumericUpDown bossTeleBossSelect;
+		private System.Windows.Forms.Label label13;
+		private System.Windows.Forms.Button bossTeleViewDest;
+		private System.Windows.Forms.ToolStripMenuItem showBossTeleportsToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem editBossTeleportToolStripMenuItem;
 	}
 }
 

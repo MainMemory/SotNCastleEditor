@@ -11,7 +11,9 @@ namespace SotNData
 	public class CastleMap
 	{
 		public CastleZone[] Zones { get; set; }
-		public TeleportDest[] Teleports { get; set; }
+		public TeleportDest[] Teleports { set => TeleportDests = value; }
+		public TeleportDest[] TeleportDests { get; set; }
+		public BossTeleport[] BossTeleports { get; set; }
 		public RoomIndex[][] MatchingRooms { get; set; }
 
 		public static CastleMap Load(string filename) => JsonConvert.DeserializeObject<CastleMap>(File.ReadAllText(filename));
@@ -22,9 +24,12 @@ namespace SotNData
 		{
 			foreach (var zone in Zones)
 				zone.PatchROM(stream);
-			stream.Position = Util.TeleportTableOffset;
-			foreach (var tele in Teleports)
+			stream.Position = Util.TeleportDestTableOffset;
+			foreach (var tele in TeleportDests)
 				tele.PatchROM(stream);
+			stream.Position = Util.BossTeleportTableOffset;
+			foreach (var tele in BossTeleports)
+				tele.PatchROM(stream, Zones);
 			stream.Position = Util.MapGraphicsOffset;
 			var mappx = Util.GenerateMap(this).GetPixels4bpp();
 			stream.Write(mappx, 0, mappx.Length);
@@ -400,10 +405,39 @@ namespace SotNData
 		}
 	}
 
+	public class BossTeleport : RoomIndex
+	{
+		public int X { get; set; }
+		public int Y { get; set; }
+		public int BossID { get; set; }
+		public int DestID { get; set; }
+
+		public void PatchROM(Stream stream, CastleZone[] zones)
+		{
+			var bw = new BinaryWriter(stream);
+			var x = X;
+			var y = Y;
+			var z = zones.FirstOrDefault(a => a.ID == Zone);
+			if (z != null && Room < z.Rooms.Length)
+			{
+				var r = z.Rooms[Room];
+				x += r.X + r.LayoutOffsetX;
+				y += r.Y + r.LayoutOffsetY;
+			}
+			bw.Write(x);
+			bw.Write(y);
+			bw.Write((int)Zone);
+			bw.Write(BossID);
+			bw.Write(DestID);
+		}
+	}
+
 	public class MapPatch
 	{
 		public Dictionary<Zones, Dictionary<int, RoomPatch>> RoomLocs { get; set; }
-		public Dictionary<int, TeleportPatch> Teleports { get; set; }
+		public Dictionary<int, TeleportDestPatch> Teleports { set => TeleportDests = value; }
+		public Dictionary<int, TeleportDestPatch> TeleportDests { get; set; }
+		public Dictionary<int, BossTeleportPatch> BossTeleports { get; set; }
 
 		public static MapPatch Load(string filename) => JsonConvert.DeserializeObject<MapPatch>(File.ReadAllText(filename));
 
@@ -414,7 +448,7 @@ namespace SotNData
 			var result = new MapPatch()
 			{
 				RoomLocs = new Dictionary<Zones, Dictionary<int, RoomPatch>>(),
-				Teleports = new Dictionary<int, TeleportPatch>()
+				TeleportDests = new Dictionary<int, TeleportDestPatch>()
 			};
 			for (int zn = 0; zn < modified.Zones.Length; zn++)
 			{
@@ -430,11 +464,17 @@ namespace SotNData
 					result.RoomLocs[zmod.ID].Add(rn, rpatch);
 				}
 			}
-			for (int tn = 0; tn < modified.Teleports.Length; tn++)
+			for (int tn = 0; tn < modified.TeleportDests.Length; tn++)
 			{
-				var tpatch = TeleportPatch.Create(original.Teleports[tn], modified.Teleports[tn]);
+				var tpatch = TeleportDestPatch.Create(original.TeleportDests[tn], modified.TeleportDests[tn]);
 				if (tpatch != null)
-					result.Teleports.Add(tn, tpatch);
+					result.TeleportDests.Add(tn, tpatch);
+			}
+			for (int tn = 0; tn < modified.BossTeleports.Length; tn++)
+			{
+				var tpatch = BossTeleportPatch.Create(original.BossTeleports[tn], modified.BossTeleports[tn]);
+				if (tpatch != null)
+					result.BossTeleports.Add(tn, tpatch);
 			}
 			return result;
 		}
@@ -447,8 +487,10 @@ namespace SotNData
 				foreach (var rpatch in zpatch.Value)
 					rpatch.Value.Apply(zone.Rooms[rpatch.Key]);
 			}
-			foreach (var tpatch in Teleports)
-				tpatch.Value.Apply(mapInfo.Teleports[tpatch.Key]);
+			foreach (var tpatch in TeleportDests)
+				tpatch.Value.Apply(mapInfo.TeleportDests[tpatch.Key]);
+			foreach (var tpatch in BossTeleports)
+				tpatch.Value.Apply(mapInfo.BossTeleports[tpatch.Key]);
 		}
 	}
 
@@ -576,7 +618,7 @@ namespace SotNData
 		}
 	}
 
-	public class TeleportPatch
+	public class TeleportDestPatch
 	{
 		public Zones? Zone { get; set; }
 		public short? Room { get; set; }
@@ -584,9 +626,9 @@ namespace SotNData
 		public short? Y { get; set; }
 		public Zones? PreviousTileset { get; set; }
 
-		public static TeleportPatch Create(TeleportDest original, TeleportDest modified)
+		public static TeleportDestPatch Create(TeleportDest original, TeleportDest modified)
 		{
-			var result = new TeleportPatch();
+			var result = new TeleportDestPatch();
 			bool changed = false;
 			if (modified.Zone != original.Zone)
 			{
@@ -626,6 +668,67 @@ namespace SotNData
 				tele.Y = Y.Value;
 			if (PreviousTileset.HasValue)
 				tele.PreviousTileset = PreviousTileset.Value;
+		}
+	}
+
+	public class BossTeleportPatch
+	{
+		public Zones? Zone { get; set; }
+		public short? Room { get; set; }
+		public int? X { get; set; }
+		public int? Y { get; set; }
+		public int? BossID { get; set; }
+		public int? DestID { get; set; }
+
+		public static BossTeleportPatch Create(BossTeleport original, BossTeleport modified)
+		{
+			var result = new BossTeleportPatch();
+			bool changed = false;
+			if (modified.Zone != original.Zone)
+			{
+				changed = true;
+				result.Zone = modified.Zone;
+			}
+			if (modified.Room != original.Room)
+			{
+				changed = true;
+				result.Room = modified.Room;
+			}
+			if (modified.X != original.X || modified.Y != original.Y)
+			{
+				changed = true;
+				result.X = modified.X;
+				result.Y = modified.Y;
+			}
+			if (modified.BossID != original.BossID)
+			{
+				changed = true;
+				result.BossID = modified.BossID;
+			}
+			if (modified.DestID != original.DestID)
+			{
+				changed = true;
+				result.DestID = modified.DestID;
+			}
+			if (changed)
+				return result;
+			return null;
+		}
+
+		public void Apply(BossTeleport tele)
+		{
+			if (Zone.HasValue)
+				tele.Zone = Zone.Value;
+			if (Room.HasValue)
+				tele.Room = Room.Value;
+			if (X.HasValue)
+				tele.X = X.Value;
+			if (Y.HasValue)
+				tele.Y = Y.Value;
+			if (BossID.HasValue)
+				tele.BossID = BossID.Value;
+			if (DestID.HasValue)
+				tele.DestID = DestID.Value;
 		}
 	}
 
@@ -1036,7 +1139,8 @@ namespace SotNData
 		}
 
 		public static int MapGraphicsOffset => AdjustOffset(0x1EF8D0);
-		public static int TeleportTableOffset => AdjustOffset(0xAE444);
+		public static int TeleportDestTableOffset => AdjustOffset(0xAE444);
+		public static int BossTeleportTableOffset => AdjustOffset(0xAEA94);
 
 		static readonly ZoneInfo[] stageFiles =
 		{
@@ -1115,7 +1219,7 @@ namespace SotNData
 
 		static readonly Brush areaBrush = new SolidBrush(Color.FromArgb(128, 0, 0, 255));
 
-		private static void LoadDataFromBin()
+		public static void LoadDataFromBin()
 		{
 			var mapInfo = new CastleMap();
 			using (var fs = File.OpenRead(@"D:\CD\PS1\Castlevania - Symphony of the Night (Track 1).bin"))
@@ -1126,11 +1230,33 @@ namespace SotNData
 				foreach (var zone in stageFiles)
 					zones.Add(zone.LoadData(ms));
 				mapInfo.Zones = zones.ToArray();
-				mapInfo.Teleports = new TeleportDest[zones.SelectMany(a => a.Rooms).Select(b => b.Teleport).Max().Value];
-				ms.Seek(TeleportTableOffset, SeekOrigin.Begin);
+				var bosses = new List<BossTeleport>();
+				ms.Seek(BossTeleportTableOffset, SeekOrigin.Begin);
 				var br = new BinaryReader(ms);
-				for (int i = 0; i < mapInfo.Teleports.Length; i++)
-					mapInfo.Teleports[i] = new TeleportDest() { X = br.ReadInt16(), Y = br.ReadInt16(), Room = (short)(br.ReadInt16() / 8), PreviousTileset = (Zones)br.ReadInt16(), Zone = (Zones)br.ReadInt16() };
+				var x = br.ReadInt32();
+				while (x != 0x80)
+				{
+					var y = br.ReadInt32();
+					var zid = (Zones)br.ReadInt32();
+					var zone = zones.Find(a => a.ID == zid);
+					short rid = 0;
+					if (zone != null)
+					{
+						rid = (short)Array.FindIndex(zone.Rooms, a => a.LayoutBounds.Contains(x, y));
+						if (rid != -1)
+						{
+							x -= zone.Rooms[rid].LayoutBounds.X;
+							y -= zone.Rooms[rid].LayoutBounds.Y;
+						}
+					}
+					bosses.Add(new BossTeleport() { X = x, Y = y, Zone = zid, Room = rid, BossID = br.ReadInt32(), DestID = br.ReadInt32() });
+					x = br.ReadInt32();
+				}
+				mapInfo.BossTeleports = bosses.ToArray();
+				mapInfo.TeleportDests = new TeleportDest[zones.SelectMany(a => a.Rooms).Select(b => b.Teleport).Concat(bosses.Select(c => (int?)c.DestID)).Max().Value + 1];
+				ms.Seek(TeleportDestTableOffset, SeekOrigin.Begin);
+				for (int i = 0; i < mapInfo.TeleportDests.Length; i++)
+					mapInfo.TeleportDests[i] = new TeleportDest() { X = br.ReadInt16(), Y = br.ReadInt16(), Room = (short)(br.ReadInt16() / 8), PreviousTileset = (Zones)br.ReadInt16(), Zone = (Zones)br.ReadInt16() };
 			}
 			var roomlist = new List<MapRoom>();
 			using (var bmp = new Bitmap(@"D:\CD\PS1\SOTN\F_MAP.BIN.png"))

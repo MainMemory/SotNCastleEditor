@@ -25643,7 +25643,7 @@
       ]
     }
   ],
-  "Teleports": [
+  "TeleportDests": [
     {
       "X": 496,
       "Y": 392,
@@ -26511,6 +26511,246 @@
       "PreviousTileset": 30,
       "Zone": 4,
       "Room": 11
+    },
+    {
+      "X": 752,
+      "Y": 132,
+      "PreviousTileset": 30,
+      "Zone": 4,
+      "Room": 13
+    },
+    {
+      "X": 496,
+      "Y": 132,
+      "PreviousTileset": 4,
+      "Zone": 30,
+      "Room": 0
+    }
+  ],
+  "BossTeleports": [
+    {
+      "X": 0,
+      "Y": 0,
+      "BossID": 26,
+      "DestID": 100,
+      "Zone": 0,
+      "Room": 9
+    },
+    {
+      "X": 0,
+      "Y": 0,
+      "BossID": 255,
+      "DestID": 60,
+      "Zone": 18,
+      "Room": 1
+    },
+    {
+      "X": 1,
+      "Y": 0,
+      "BossID": 255,
+      "DestID": 60,
+      "Zone": 18,
+      "Room": 1
+    },
+    {
+      "X": 1,
+      "Y": 0,
+      "BossID": 1,
+      "DestID": 125,
+      "Zone": 4,
+      "Room": 12
+    },
+    {
+      "X": 1,
+      "Y": 0,
+      "BossID": 3,
+      "DestID": 118,
+      "Zone": 3,
+      "Room": 3
+    },
+    {
+      "X": 0,
+      "Y": 0,
+      "BossID": 4,
+      "DestID": 114,
+      "Zone": 10,
+      "Room": 5
+    },
+    {
+      "X": 1,
+      "Y": 0,
+      "BossID": 4,
+      "DestID": 115,
+      "Zone": 10,
+      "Room": 5
+    },
+    {
+      "X": 0,
+      "Y": 0,
+      "BossID": 5,
+      "DestID": 111,
+      "Zone": 9,
+      "Room": 28
+    },
+    {
+      "X": 0,
+      "Y": 0,
+      "BossID": 2,
+      "DestID": 108,
+      "Zone": 1,
+      "Room": 11
+    },
+    {
+      "X": 1,
+      "Y": 0,
+      "BossID": 2,
+      "DestID": 72,
+      "Zone": 1,
+      "Room": 11
+    },
+    {
+      "X": 0,
+      "Y": 0,
+      "BossID": 7,
+      "DestID": 104,
+      "Zone": 6,
+      "Room": 4
+    },
+    {
+      "X": 1,
+      "Y": 0,
+      "BossID": 7,
+      "DestID": 105,
+      "Zone": 6,
+      "Room": 4
+    },
+    {
+      "X": 3,
+      "Y": 3,
+      "BossID": 14,
+      "DestID": 101,
+      "Zone": 11,
+      "Room": 2
+    },
+    {
+      "X": 0,
+      "Y": 0,
+      "BossID": 13,
+      "DestID": 87,
+      "Zone": 5,
+      "Room": 2
+    },
+    {
+      "X": 1,
+      "Y": 0,
+      "BossID": 13,
+      "DestID": 88,
+      "Zone": 5,
+      "Room": 2
+    },
+    {
+      "X": 0,
+      "Y": 0,
+      "BossID": 11,
+      "DestID": 121,
+      "Zone": 42,
+      "Room": 5
+    },
+    {
+      "X": 1,
+      "Y": 0,
+      "BossID": 11,
+      "DestID": 122,
+      "Zone": 42,
+      "Room": 5
+    },
+    {
+      "X": 0,
+      "Y": 0,
+      "BossID": 8,
+      "DestID": 96,
+      "Zone": 44,
+      "Room": 16
+    },
+    {
+      "X": 3,
+      "Y": 1,
+      "BossID": 8,
+      "DestID": 97,
+      "Zone": 44,
+      "Room": 16
+    },
+    {
+      "X": 1,
+      "Y": 0,
+      "BossID": 12,
+      "DestID": 91,
+      "Zone": 37,
+      "Room": 2
+    },
+    {
+      "X": 0,
+      "Y": 0,
+      "BossID": 12,
+      "DestID": 92,
+      "Zone": 37,
+      "Room": 2
+    },
+    {
+      "X": 1,
+      "Y": 0,
+      "BossID": 15,
+      "DestID": 83,
+      "Zone": 38,
+      "Room": 4
+    },
+    {
+      "X": 0,
+      "Y": 0,
+      "BossID": 15,
+      "DestID": 84,
+      "Zone": 38,
+      "Room": 4
+    },
+    {
+      "X": 1,
+      "Y": 0,
+      "BossID": 16,
+      "DestID": 79,
+      "Zone": 33,
+      "Room": 11
+    },
+    {
+      "X": 0,
+      "Y": 0,
+      "BossID": 16,
+      "DestID": 80,
+      "Zone": 33,
+      "Room": 11
+    },
+    {
+      "X": 0,
+      "Y": 0,
+      "BossID": 18,
+      "DestID": 75,
+      "Zone": 41,
+      "Room": 28
+    },
+    {
+      "X": 0,
+      "Y": 1,
+      "BossID": 19,
+      "DestID": 70,
+      "Zone": 36,
+      "Room": 12
+    },
+    {
+      "X": 0,
+      "Y": 1,
+      "BossID": 21,
+      "DestID": 67,
+      "Zone": 35,
+      "Room": 3
     }
   ],
   "MatchingRooms": [

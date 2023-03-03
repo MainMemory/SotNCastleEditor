@@ -49,6 +49,7 @@ namespace SotNCastleEditor
 		};
 		readonly Brush darkenBrush = new SolidBrush(Color.FromArgb(128, Color.Black));
 		readonly Brush highlightBrush = new SolidBrush(Color.FromArgb(64, Color.White));
+		readonly Brush bossTeleBrush = new SolidBrush(Color.FromArgb(192, Color.White));
 		readonly Brush selectBrush = new SolidBrush(Color.FromArgb(64, Color.Blue));
 		readonly Pen borderPen = new Pen(Color.White, 4);
 		readonly System.Drawing.Imaging.ImageAttributes imageTrans = new System.Drawing.Imaging.ImageAttributes();
@@ -88,7 +89,7 @@ namespace SotNCastleEditor
 
 		private void openToolStripMenuItem_Click(object sender, EventArgs e)
 		{
-			using (var ofd = new OpenFileDialog() { DefaultExt = "caspat", Filter = "Castle Files|*.castle;*.caspat|All Files|*.*", RestoreDirectory = true })
+			using (var ofd = new OpenFileDialog() { DefaultExt = "caspat", Filter = "Castle Files|*.caspat;*.castle|All Files|*.*", RestoreDirectory = true })
 				if (ofd.ShowDialog(this) == DialogResult.OK)
 					OpenFile(ofd.FileName);
 		}
@@ -115,11 +116,14 @@ namespace SotNCastleEditor
 			teleportAreaSelect.Items.Clear();
 			teleportPrevTSSelect.BeginUpdate();
 			teleportPrevTSSelect.Items.Clear();
+			bossTeleAreaSelect.BeginUpdate();
+			bossTeleAreaSelect.Items.Clear();
 			foreach (var zone in mapInfo.Zones)
 			{
 				layoutAreaSelect.Items.Add(zone.Name);
 				teleportAreaSelect.Items.Add(zone.Name);
 				teleportPrevTSSelect.Items.Add(zone.Name);
+				bossTeleAreaSelect.Items.Add(zone.Name);
 				zoneDict.Add(zone.ID, zone);
 				if (!mapDict.ContainsKey(zone.Map))
 					mapDict.Add(zone.Map, new List<CastleZone>());
@@ -137,6 +141,7 @@ namespace SotNCastleEditor
 			layoutAreaSelect.EndUpdate();
 			teleportAreaSelect.EndUpdate();
 			teleportPrevTSSelect.EndUpdate();
+			bossTeleAreaSelect.EndUpdate();
 			foreach (var set in mapInfo.MatchingRooms)
 			{
 				var rooms = set.Select(a => zoneDict[a.Zone].Rooms[a.Room]).ToArray();
@@ -144,10 +149,13 @@ namespace SotNCastleEditor
 					rm.MatchingRooms = rooms;
 			}
 			teleportListBox.Items.Clear();
-			teleportListBox.Items.AddRange(mapInfo.Teleports.Select(a => $"{a.Zone} {a.Room} {a.X} {a.Y}").ToArray());
+			teleportListBox.Items.AddRange(mapInfo.TeleportDests.Select(a => $"{a.Zone} {a.Room} {a.X} {a.Y}").ToArray());
+			bossTeleListBox.Items.Clear();
+			bossTeleListBox.Items.AddRange(mapInfo.BossTeleports.Select(a => $"{a.Zone} {a.Room} {a.X} {a.Y}").ToArray());
 			fileName = filename;
 			layoutAreaSelect.SelectedIndex = 0;
 			teleportListBox.SelectedIndex = 0;
+			bossTeleListBox.SelectedIndex = 0;
 		}
 
 		private void saveToolStripMenuItem_Click(object sender, EventArgs e)
@@ -165,7 +173,7 @@ namespace SotNCastleEditor
 
 		private void SaveAs()
 		{
-			using (var sfd = new SaveFileDialog() { DefaultExt = "caspat", Filter = "Castle Files|*.castle;*.caspat|All Files|*.*", RestoreDirectory = true })
+			using (var sfd = new SaveFileDialog() { DefaultExt = "caspat", Filter = "Castle Files|*.caspat;*.castle|All Files|*.*", RestoreDirectory = true })
 			{
 				if (fileName != null)
 				{
@@ -277,14 +285,24 @@ namespace SotNCastleEditor
 						}
 					}
 				}
+				if (showBossTeleportsToolStripMenuItem.Checked)
+					foreach (var tele in mapInfo.BossTeleports.Where(a => zoneDict.ContainsKey(a.Zone) && zones.Contains(zoneDict[a.Zone])))
+					{
+						var zone = zoneDict[tele.Zone];
+						if (tele.Room < zone.Rooms.Length)
+						{
+							var room = zone.Rooms[tele.Room];
+							gfx.FillRectangle(bossTeleBrush, (room.X + room.LayoutOffsetX + tele.X) * 256, (room.Y + room.LayoutOffsetY + tele.Y) * 256, 256, 256);
+						}
+					}
 				if (showTeleportDestsToolStripMenuItem.Checked)
 				{
-					foreach (var tele in mapInfo.Teleports)
+					foreach (var tele in mapInfo.TeleportDests)
 					{
 						var zid = tele.Zone;
 						if (curZone.Map >= Maps.ReverseCastle)
 							zid ^= Zones.BlackMarbleGallery;
-						if (zoneDict.TryGetValue(zid, out var zone) && tele.Room < zone.Rooms.Length)
+						if (zoneDict.TryGetValue(zid, out var zone) && zones.Contains(zone) && tele.Room < zone.Rooms.Length)
 						{
 							var room = zone.Rooms[tele.Room];
 							var bnd = room.Bounds;
@@ -310,7 +328,7 @@ namespace SotNCastleEditor
 					}
 					if (selectedRoom != null && selectedRoom.Teleport.HasValue)
 					{
-						var tele = mapInfo.Teleports[selectedRoom.Teleport.Value];
+						var tele = mapInfo.TeleportDests[selectedRoom.Teleport.Value];
 						var zid = tele.Zone;
 						if (curZone.Map >= Maps.ReverseCastle)
 							zid ^= Zones.BlackMarbleGallery;
@@ -397,6 +415,10 @@ namespace SotNCastleEditor
 					case MouseButtons.Right:
 						editTeleportDestToolStripMenuItem.Enabled = selectedRoom.Teleport.HasValue;
 						moveTeleportDestHereToolStripMenuItem.Enabled = selectedRoom.Tiles != null;
+						editBossTeleportToolStripMenuItem.Enabled = mapInfo.BossTeleports.Any(a => a.Zone == (Zones)layoutAreaSelect.SelectedIndex
+																				 && a.Room == Array.IndexOf(mapInfo.Zones[layoutAreaSelect.SelectedIndex].Rooms, selectedRoom)
+																				 && a.X == chunkLoc.X - selectedRoom.X - selectedRoom.LayoutOffsetX
+																				 && a.Y == chunkLoc.Y - selectedRoom.Y - selectedRoom.LayoutOffsetY);
 						menuLoc = new Point((int)(e.X / zoomLevel), (int)(e.Y / zoomLevel));
 						contextMenuStrip1.Show(layoutPanel, e.Location);
 						break;
@@ -485,7 +507,7 @@ namespace SotNCastleEditor
 
 		private void moveTeleportDestHereToolStripMenuItem_Click(object sender, EventArgs e)
 		{
-			var tele = mapInfo.Teleports[teleportListBox.SelectedIndex];
+			var tele = mapInfo.TeleportDests[teleportListBox.SelectedIndex];
 			int x = menuLoc.X;
 			int y = menuLoc.Y;
 			var bnd = selectedRoom.Bounds;
@@ -512,6 +534,15 @@ namespace SotNCastleEditor
 			tele.X = (short)x;
 			tele.Y = (short)y;
 			SelectedTeleportChanged();
+		}
+
+		private void editBossTeleportToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			bossTeleListBox.SelectedIndex = Array.FindIndex(mapInfo.BossTeleports, a => a.Zone == (Zones)layoutAreaSelect.SelectedIndex
+																	 && a.Room == Array.IndexOf(mapInfo.Zones[layoutAreaSelect.SelectedIndex].Rooms, selectedRoom)
+																	 && a.X == menuLoc.X / 256 - selectedRoom.X - selectedRoom.LayoutOffsetX
+																	 && a.Y == menuLoc.Y / 256 - selectedRoom.Y - selectedRoom.LayoutOffsetY);
+			tabControl1.SelectedIndex = 2;
 		}
 
 		private void roomTilePanel_Paint(object sender, PaintEventArgs e)
@@ -664,7 +695,7 @@ namespace SotNCastleEditor
 
 		private void TeleportRoomChanged()
 		{
-			var tele = mapInfo.Teleports[teleportListBox.SelectedIndex];
+			var tele = mapInfo.TeleportDests[teleportListBox.SelectedIndex];
 			var zone = GetTeleZone(tele);
 			if (zone != null && tele.Room < zone.Rooms.Length)
 			{
@@ -687,7 +718,7 @@ namespace SotNCastleEditor
 
 		private void DrawTeleportRoom(Graphics g2)
 		{
-			var tele = mapInfo.Teleports[teleportListBox.SelectedIndex];
+			var tele = mapInfo.TeleportDests[teleportListBox.SelectedIndex];
 			Bitmap roomImg = null;
 			var zone = GetTeleZone(tele);
 			if (zone != null && tele.Room < zone.Rooms.Length)
@@ -730,7 +761,7 @@ namespace SotNCastleEditor
 		private void SelectedTeleportChanged()
 		{
 			if (teleportListBox.SelectedIndex == -1) return;
-			var tele = mapInfo.Teleports[teleportListBox.SelectedIndex];
+			var tele = mapInfo.TeleportDests[teleportListBox.SelectedIndex];
 			suppressEvents = true;
 			teleportAreaSelect.SelectedIndex = Array.FindIndex(mapInfo.Zones, a => a.ID == tele.Zone);
 			teleportRoomSelect.Value = tele.Room;
@@ -750,7 +781,7 @@ namespace SotNCastleEditor
 		{
 			if (teleportAreaSelect.SelectedIndex == -1 || suppressEvents)
 				return;
-			mapInfo.Teleports[teleportListBox.SelectedIndex].Zone = mapInfo.Zones[teleportAreaSelect.SelectedIndex].ID;
+			mapInfo.TeleportDests[teleportListBox.SelectedIndex].Zone = mapInfo.Zones[teleportAreaSelect.SelectedIndex].ID;
 			TeleportRoomChanged();
 		}
 
@@ -758,7 +789,7 @@ namespace SotNCastleEditor
 		{
 			if (teleportAreaSelect.SelectedIndex == -1 || suppressEvents)
 				return;
-			mapInfo.Teleports[teleportListBox.SelectedIndex].Room = (short)teleportRoomSelect.Value;
+			mapInfo.TeleportDests[teleportListBox.SelectedIndex].Room = (short)teleportRoomSelect.Value;
 			TeleportRoomChanged();
 		}
 
@@ -766,14 +797,14 @@ namespace SotNCastleEditor
 		{
 			if (teleportAreaSelect.SelectedIndex == -1 || suppressEvents)
 				return;
-			mapInfo.Teleports[teleportListBox.SelectedIndex].PreviousTileset = mapInfo.Zones[teleportPrevTSSelect.SelectedIndex].ID;
+			mapInfo.TeleportDests[teleportListBox.SelectedIndex].PreviousTileset = mapInfo.Zones[teleportPrevTSSelect.SelectedIndex].ID;
 		}
 
 		private void teleportXCoord_ValueChanged(object sender, EventArgs e)
 		{
 			if (teleportAreaSelect.SelectedIndex == -1 || suppressEvents)
 				return;
-			mapInfo.Teleports[teleportListBox.SelectedIndex].X = (short)teleportXCoord.Value;
+			mapInfo.TeleportDests[teleportListBox.SelectedIndex].X = (short)teleportXCoord.Value;
 			DrawTeleportRoom();
 		}
 
@@ -781,7 +812,7 @@ namespace SotNCastleEditor
 		{
 			if (teleportAreaSelect.SelectedIndex == -1 || suppressEvents)
 				return;
-			mapInfo.Teleports[teleportListBox.SelectedIndex].Y = (short)teleportYCoord.Value;
+			mapInfo.TeleportDests[teleportListBox.SelectedIndex].Y = (short)teleportYCoord.Value;
 			DrawTeleportRoom();
 		}
 
@@ -815,7 +846,7 @@ namespace SotNCastleEditor
 		{
 			if (teleportAreaSelect.SelectedIndex == -1)
 				return;
-			var tele = mapInfo.Teleports[teleportListBox.SelectedIndex];
+			var tele = mapInfo.TeleportDests[teleportListBox.SelectedIndex];
 			int x = e.X;
 			int y = e.Y;
 			if (GetTeleZone(tele)?.Map >= Maps.ReverseCastle)
@@ -831,6 +862,127 @@ namespace SotNCastleEditor
 			suppressEvents = false;
 			teleLoc = null;
 			DrawTeleportRoom();
+		}
+
+		private void BossTeleRoomChanged()
+		{
+			var tele = mapInfo.BossTeleports[bossTeleListBox.SelectedIndex];
+			var zone = GetTeleZone(tele);
+			if (zone != null && tele.Room < zone.Rooms.Length)
+			{
+				var room = zone.Rooms[tele.Room];
+				if (room.Image != null)
+					bossTelePreview.Size = room.Image.Size;
+				else
+					bossTelePreview.Size = new Size(room.Width * 256, room.Height * 256);
+			}
+			else
+				bossTelePreview.Size = new Size(256, 256);
+			DrawBossTeleRoom();
+		}
+
+		private void DrawBossTeleRoom()
+		{
+			using (Graphics gfx = bossTelePreview.CreateGraphics())
+				DrawBossTeleRoom(gfx);
+		}
+
+		private void DrawBossTeleRoom(Graphics g2)
+		{
+			var tele = mapInfo.BossTeleports[bossTeleListBox.SelectedIndex];
+			Bitmap roomImg = null;
+			var zone = GetTeleZone(tele);
+			if (zone != null && tele.Room < zone.Rooms.Length)
+				roomImg = zone.Rooms[tele.Room].Image;
+			using (Bitmap bmp = new Bitmap(bossTelePreview.Width, bossTelePreview.Height))
+			using (Graphics gfx = Graphics.FromImage(bmp))
+			{
+				if (roomImg != null)
+					gfx.DrawImage(roomImg, 0, 0, roomImg.Width, roomImg.Height);
+				else
+				{
+					gfx.Clear(Color.White);
+					gfx.DrawLine(Pens.Red, 0, 0, bossTelePreview.Width, bossTelePreview.Height);
+					gfx.DrawLine(Pens.Red, 0, bossTelePreview.Height, bossTelePreview.Width, 0);
+				}
+				gfx.FillRectangle(bossTeleBrush, tele.X * 256, tele.Y * 256, 256, 256);
+				g2.DrawImage(bmp, 0, 0, bossTelePreview.Width, bossTelePreview.Height);
+			}
+		}
+
+		private CastleZone GetTeleZone(BossTeleport tele)
+		{
+			zoneDict.TryGetValue(tele.Zone, out CastleZone zone);
+			return zone;
+		}
+
+		private void SelectedBossTeleChanged()
+		{
+			if (bossTeleListBox.SelectedIndex == -1) return;
+			var tele = mapInfo.BossTeleports[bossTeleListBox.SelectedIndex];
+			suppressEvents = true;
+			bossTeleAreaSelect.SelectedIndex = Array.FindIndex(mapInfo.Zones, a => a.ID == tele.Zone);
+			bossTeleRoomSelect.Value = tele.Room;
+			bossTeleXCoord.Value = tele.X;
+			bossTeleYCoord.Value = tele.Y;
+			bossTeleBossSelect.Value = tele.BossID;
+			suppressEvents = false;
+			BossTeleRoomChanged();
+		}
+
+		private void bossTeleListBox_SelectedIndexChanged(object sender, EventArgs e)
+		{
+			SelectedBossTeleChanged();
+		}
+
+		private void bossTeleAreaSelect_SelectedIndexChanged(object sender, EventArgs e)
+		{
+			if (bossTeleAreaSelect.SelectedIndex == -1 || suppressEvents)
+				return;
+			mapInfo.BossTeleports[bossTeleListBox.SelectedIndex].Zone = mapInfo.Zones[bossTeleAreaSelect.SelectedIndex].ID;
+			BossTeleRoomChanged();
+		}
+
+		private void bossTeleRoomSelect_ValueChanged(object sender, EventArgs e)
+		{
+			if (bossTeleAreaSelect.SelectedIndex == -1 || suppressEvents)
+				return;
+			mapInfo.BossTeleports[bossTeleListBox.SelectedIndex].Room = (short)bossTeleRoomSelect.Value;
+			BossTeleRoomChanged();
+		}
+
+		private void bossTeleXCoord_ValueChanged(object sender, EventArgs e)
+		{
+			if (bossTeleAreaSelect.SelectedIndex == -1 || suppressEvents)
+				return;
+			mapInfo.BossTeleports[bossTeleListBox.SelectedIndex].X = (short)bossTeleXCoord.Value;
+			DrawBossTeleRoom();
+		}
+
+		private void bossTeleYCoord_ValueChanged(object sender, EventArgs e)
+		{
+			if (bossTeleAreaSelect.SelectedIndex == -1 || suppressEvents)
+				return;
+			mapInfo.BossTeleports[bossTeleListBox.SelectedIndex].Y = (short)bossTeleYCoord.Value;
+			DrawBossTeleRoom();
+		}
+
+		private void bossTeleBossSelect_ValueChanged(object sender, EventArgs e)
+		{
+			if (bossTeleAreaSelect.SelectedIndex == -1 || suppressEvents)
+				return;
+			mapInfo.BossTeleports[bossTeleListBox.SelectedIndex].BossID = (int)bossTeleBossSelect.Value;
+		}
+
+		private void bossTeleViewDest_Click(object sender, EventArgs e)
+		{
+			teleportListBox.SelectedIndex = mapInfo.BossTeleports[bossTeleListBox.SelectedIndex].DestID;
+			tabControl1.SelectedIndex = 1;
+		}
+
+		private void bossTelePreview_Paint(object sender, PaintEventArgs e)
+		{
+			DrawBossTeleRoom(e.Graphics);
 		}
 	}
 }
