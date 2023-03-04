@@ -509,13 +509,16 @@ namespace SotNData
 				result.Y = modified.Y;
 			}
 			List<TilePatch> tiles = new List<TilePatch>();
-			for (int y = 0; y < modified.Height; y++)
-				for (int x = 0; x < modified.Width; x++)
-				{
-					var tp = TilePatch.Create(original.Tiles[y][x], modified.Tiles[y][x], x, y);
-					if (tp != null)
-						tiles.Add(tp);
-				}
+			if (modified.Tiles != null)
+			{
+				for (int y = 0; y < modified.Height; y++)
+					for (int x = 0; x < modified.Width; x++)
+					{
+						var tp = TilePatch.Create(original.Tiles[y][x], modified.Tiles[y][x], x, y);
+						if (tp != null)
+							tiles.Add(tp);
+					}
+			}
 			if (!result.X.HasValue && tiles.Count == 0)
 				return null;
 			result.Tiles = tiles.ToArray();
@@ -1430,50 +1433,52 @@ namespace SotNData
 						if (room.Tiles[y][x] != null)
 						{
 							MapTile exits = room.Tiles[y][x];
-							if (exits.Type > tiles[x, y])
-								tiles[x, y] = exits.Type;
-							if (hdoors[x, y].HasValue)
-								switch (hdoors[x, y].Value)
+							int mx = room.X + x;
+							int my = room.Y + y;
+							if (exits.Type > tiles[mx, my])
+								tiles[mx, my] = exits.Type;
+							if (hdoors[mx, my].HasValue)
+								switch (hdoors[mx, my].Value)
 								{
 									case TileTypes.Normal:
 									case TileTypes.Hidden:
-										hdoors[x, y] = exits.Left;
+										hdoors[mx, my] = exits.Left;
 										break;
 								}
 							else
-								hdoors[x, y] = exits.Left;
-							if (vdoors[x, y].HasValue)
-								switch (vdoors[x, y].Value)
+								hdoors[mx, my] = exits.Left;
+							if (vdoors[mx, my].HasValue)
+								switch (vdoors[mx, my].Value)
 								{
 									case TileTypes.Normal:
 									case TileTypes.Hidden:
-										vdoors[x, y] = exits.Top;
+										vdoors[mx, my] = exits.Top;
 										break;
 								}
 							else
-								vdoors[x, y] = exits.Top;
+								vdoors[mx, my] = exits.Top;
 							if (x < 0x3F)
-								if (hdoors[x + 1, y].HasValue)
-									switch (hdoors[x + 1, y].Value)
+								if (hdoors[mx + 1, my].HasValue)
+									switch (hdoors[mx + 1, my].Value)
 									{
 										case TileTypes.Normal:
 										case TileTypes.Hidden:
-											hdoors[x + 1, y] = exits.Right;
+											hdoors[mx + 1, my] = exits.Right;
 											break;
 									}
 								else
-									hdoors[x + 1, y] = exits.Right;
+									hdoors[mx + 1, my] = exits.Right;
 							if (y < 0x3F)
-								if (vdoors[x, y + 1].HasValue)
-									switch (vdoors[x, y + 1].Value)
+								if (vdoors[mx, my + 1].HasValue)
+									switch (vdoors[mx, my + 1].Value)
 									{
 										case TileTypes.Normal:
 										case TileTypes.Hidden:
-											vdoors[x, y + 1] = exits.Bottom;
+											vdoors[mx, my + 1] = exits.Bottom;
 											break;
 									}
 								else
-									vdoors[x, y + 1] = exits.Bottom;
+									vdoors[mx, my + 1] = exits.Bottom;
 						}
 			}
 			BitmapBits mapbmp = new BitmapBits(256, 256);

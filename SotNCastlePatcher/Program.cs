@@ -39,7 +39,7 @@ namespace SotNCastlePatcher
 			}
 			else
 				map = CastleMap.Load(layoutfilename);
-			using (var fs = File.Open(layoutfilename, FileMode.Open))
+			using (var fs = File.Open(romfilename, FileMode.Open))
 			using (var ds = new DiscImage2352Stream(fs))
 			{
 				foreach (var stg in Util.StageFiles)
