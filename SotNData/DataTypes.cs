@@ -1141,7 +1141,7 @@ namespace SotNData
 			return BitConverter.GetBytes(Color.FromArgb((c & 0x8000) == 0x8000 ? 0x80 : 0xFF, r << 3 | r >> 2, g << 3 | g >> 2, b << 3 | b >> 2).ToArgb());
 		}
 
-		public static int MapGraphicsOffset => AdjustOffset(0x1EF8D0);
+		public static int MapGraphicsOffset => AdjustOffset(0x1EF8E8);
 		public static int TeleportDestTableOffset => AdjustOffset(0xAE444);
 		public static int BossTeleportTableOffset => AdjustOffset(0xAEA94);
 
