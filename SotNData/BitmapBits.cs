@@ -1059,10 +1059,22 @@ namespace SotNData
 			return pix;
 		}
 
-		public byte[] GetPixels4bpp()
+		public byte[] GetPixels4bppPSX()
 		{
-			byte[] result = new byte[Width / 2 * Height];
-			To4bppInternal(result, Width / 2);
+			int stride = Width / 2;
+			byte[] result = new byte[stride * Height];
+			int srcaddr = 0;
+			for (int y = 0; y < Height; y++)
+			{
+				int dstaddr = y * stride;
+				for (int x = 0; x < Width; x += 2)
+				{
+					byte px = (byte)(Bits[srcaddr++] & 0xF);
+					if (x + 1 != Width)
+						px |= (byte)((Bits[srcaddr++] & 0xF) << 4);
+					result[dstaddr++] = px;
+				}
+			}
 			return result;
 		}
 	}

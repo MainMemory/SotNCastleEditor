@@ -31,7 +31,7 @@ namespace SotNData
 			foreach (var tele in BossTeleports)
 				tele.PatchROM(stream, Zones);
 			stream.Position = Util.MapGraphicsOffset;
-			var mappx = Util.GenerateMap(this).GetPixels4bpp();
+			var mappx = Util.GenerateMap(this).GetPixels4bppPSX();
 			stream.Write(mappx, 0, mappx.Length);
 		}
 	}
@@ -53,11 +53,15 @@ namespace SotNData
 			stream.Seek(zinf.RoomListOffset, SeekOrigin.Begin);
 			for (int i = 0; i < Rooms.Length; i++)
 			{
-				var orgloc = new Point(br.ReadByte(), br.ReadByte());
-				stream.Seek(-2, SeekOrigin.Current);
-				bw.Write((byte)Rooms[i].X);
-				bw.Write((byte)Rooms[i].Y);
-				stream.Seek(2, SeekOrigin.Current);
+				ZoneRoom room = Rooms[i];
+				var orgloc = Rectangle.FromLTRB(br.ReadByte(), br.ReadByte(), br.ReadByte(), br.ReadByte());
+				stream.Seek(-4, SeekOrigin.Current);
+				int x = room.X + room.LayoutOffsetX;
+				int y = room.Y + room.LayoutOffsetY;
+				bw.Write((byte)x);
+				bw.Write((byte)y);
+				bw.Write((byte)(x + orgloc.Width));
+				bw.Write((byte)(y + orgloc.Height));
 				byte layind = br.ReadByte();
 				if (br.ReadByte() != 0xFF)
 				{
@@ -67,12 +71,14 @@ namespace SotNData
 					{
 						stream.Seek(fgoff + 8, SeekOrigin.Begin);
 						uint loadflags = br.ReadUInt32();
-						Point layloc = new Point((int)(loadflags & 0x3F), (int)((loadflags >> 6) & 0x3F));
-						if (!layloc.IsEmpty)
+						var layloc = Rectangle.FromLTRB((int)(loadflags & 0x3F), (int)((loadflags >> 6) & 0x3F), (int)((loadflags >> 12) & 0x3F), (int)((loadflags >> 18) & 0x3F));
+						if (!layloc.Location.IsEmpty)
 						{
-							loadflags &= 0xFFFFF000;
-							loadflags |= (uint)((Rooms[i].X + (orgloc.X - layloc.X)) & 0x3F);
-							loadflags |= (uint)(((Rooms[i].Y + (orgloc.Y - layloc.Y)) & 0x3F) << 6);
+							loadflags &= 0xFF000000;
+							loadflags |= (uint)(x + (orgloc.X - layloc.X) & 0x3F);
+							loadflags |= (uint)((y + (orgloc.Y - layloc.Y) & 0x3F) << 6);
+							loadflags |= (uint)((x + (orgloc.X - layloc.X) + layloc.Width & 0x3F) << 12);
+							loadflags |= (uint)((y + (orgloc.Y - layloc.Y) + layloc.Height & 0x3F) << 18);
 							stream.Seek(-4, SeekOrigin.Current);
 							bw.Write(loadflags);
 						}
@@ -81,12 +87,14 @@ namespace SotNData
 					{
 						stream.Seek(bgoff + 8, SeekOrigin.Begin);
 						uint loadflags = br.ReadUInt32();
-						Point layloc = new Point((int)(loadflags & 0x3F), (int)((loadflags >> 6) & 0x3F));
-						if (!layloc.IsEmpty)
+						var layloc = Rectangle.FromLTRB((int)(loadflags & 0x3F), (int)((loadflags >> 6) & 0x3F), (int)((loadflags >> 12) & 0x3F), (int)((loadflags >> 18) & 0x3F));
+						if (!layloc.Location.IsEmpty)
 						{
-							loadflags &= 0xFFFFF000;
-							loadflags |= (uint)((Rooms[i].X + (orgloc.X - layloc.X)) & 0x3F);
-							loadflags |= (uint)(((Rooms[i].Y + (orgloc.Y - layloc.Y)) & 0x3F) << 6);
+							loadflags &= 0xFF000000;
+							loadflags |= (uint)(x + (orgloc.X - layloc.X) & 0x3F);
+							loadflags |= (uint)((y + (orgloc.Y - layloc.Y) & 0x3F) << 6);
+							loadflags |= (uint)((x + (orgloc.X - layloc.X) + layloc.Width & 0x3F) << 12);
+							loadflags |= (uint)((y + (orgloc.Y - layloc.Y) + layloc.Height & 0x3F) << 18);
 							stream.Seek(-4, SeekOrigin.Current);
 							bw.Write(loadflags);
 						}
