@@ -30,9 +30,15 @@ namespace SotNData
 			stream.Position = Util.BossTeleportTableOffset;
 			foreach (var tele in BossTeleports)
 				tele.PatchROM(stream, Zones);
+			var bw = new BinaryWriter(stream);
+			foreach (var room in Zones.SelectMany(a => a.Rooms).Where(b => b.WarpID.HasValue))
+			{
+				stream.Position = Util.WarpRoomTableOffset + (room.WarpID.Value * 4);
+				bw.Write((short)room.X);
+				bw.Write((short)room.Y);
+			}
 			stream.Position = Util.MapGraphicsOffset;
-			var mappx = Util.GenerateMap(this).GetPixels4bppPSX();
-			stream.Write(mappx, 0, mappx.Length);
+			bw.Write(Util.GenerateMap(this).GetPixels4bppPSX());
 		}
 	}
 
@@ -161,6 +167,7 @@ namespace SotNData
 			}
 		}
 		public int? Teleport { get; set; }
+		public int? WarpID { get; set; }
 		public MapTile[][] Tiles { get; set; }
 		[JsonIgnore]
 		public ZoneRoom[] MatchingRooms { get; set; }
@@ -1152,6 +1159,7 @@ namespace SotNData
 		public static int MapGraphicsOffset => AdjustOffset(0x1EF8E8);
 		public static int TeleportDestTableOffset => AdjustOffset(0xAE444);
 		public static int BossTeleportTableOffset => AdjustOffset(0xAEA94);
+		public static int WarpRoomTableOffset => AdjustOffset(0x5883A64);
 
 		static readonly ZoneInfo[] stageFiles =
 		{
