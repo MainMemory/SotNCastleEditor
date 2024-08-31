@@ -454,7 +454,17 @@ namespace SotNData
 		public Dictionary<int, TeleportDestPatch> TeleportDests { get; set; }
 		public Dictionary<int, BossTeleportPatch> BossTeleports { get; set; }
 
-		public static MapPatch Load(string filename) => JsonConvert.DeserializeObject<MapPatch>(File.ReadAllText(filename));
+		public static MapPatch Load(string filename)
+		{
+			var result = JsonConvert.DeserializeObject<MapPatch>(File.ReadAllText(filename));
+			if (result.RoomLocs == null)
+				result.RoomLocs = new Dictionary<Zones, Dictionary<int, RoomPatch>>();
+			if (result.TeleportDests == null)
+				result.TeleportDests = new Dictionary<int, TeleportDestPatch>();
+			if (result.BossTeleports == null)
+				result.BossTeleports = new Dictionary<int, BossTeleportPatch>();
+			return result;
+		}
 
 		public void Save(string filename) => File.WriteAllText(filename, JsonConvert.SerializeObject(this, Formatting.Indented));
 
