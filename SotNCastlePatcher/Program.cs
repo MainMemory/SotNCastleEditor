@@ -15,7 +15,7 @@ namespace SotNCastlePatcher
 			else
 			{
 				Console.Write("Layout: ");
-				layoutfilename = Console.ReadLine();
+				layoutfilename = Console.ReadLine().Trim('"');
 			}
 			string romfilename;
 			if (args.Length > 1)
@@ -23,7 +23,7 @@ namespace SotNCastlePatcher
 			else
 			{
 				Console.Write("ROM: ");
-				romfilename = Console.ReadLine();
+				romfilename = Console.ReadLine().Trim('"');
 			}
 			if (Directory.Exists(layoutfilename))
 			{
