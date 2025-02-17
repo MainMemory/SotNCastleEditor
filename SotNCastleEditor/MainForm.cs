@@ -403,7 +403,7 @@ namespace SotNCastleEditor
 			if (e.Button != MouseButtons.Left && e.Button != MouseButtons.Right)
 				return;
 			var chunkLoc = new Point((int)(e.X / zoomLevel) / 256, (int)(e.Y / zoomLevel) / 256);
-			selectedRoom = mapInfo.Zones[layoutAreaSelect.SelectedIndex].Rooms.FirstOrDefault(a => a.Bounds.Contains(chunkLoc) && (a.Tiles == null || a.Tiles[chunkLoc.Y - a.Bounds.Y][chunkLoc.X - a.Bounds.X] != null));
+			selectedRoom = mapInfo.Zones[layoutAreaSelect.SelectedIndex].Rooms.FirstOrDefault(a => a.Bounds.Contains(chunkLoc) && (!clipGraphicsToMapToolStripMenuItem.Checked || a.Tiles == null || a.Tiles[chunkLoc.Y - a.Bounds.Y][chunkLoc.X - a.Bounds.X] != null));
 			if (selectedRoom != null)
 			{
 				switch (e.Button)
@@ -452,7 +452,7 @@ namespace SotNCastleEditor
 			}
 			else
 			{
-				var rm = mapInfo.Zones[layoutAreaSelect.SelectedIndex].Rooms.FirstOrDefault(a => a.Bounds.Contains(chunkLoc) && (a.Tiles == null || a.Tiles[chunkLoc.Y - a.Bounds.Y][chunkLoc.X - a.Bounds.X] != null));
+				var rm = mapInfo.Zones[layoutAreaSelect.SelectedIndex].Rooms.FirstOrDefault(a => a.Bounds.Contains(chunkLoc) && (!clipGraphicsToMapToolStripMenuItem.Checked || a.Tiles == null || a.Tiles[chunkLoc.Y - a.Bounds.Y][chunkLoc.X - a.Bounds.X] != null));
 				if (highlightRoom != rm)
 				{
 					layoutPanel.Cursor = rm == null ? Cursors.Default : Cursors.SizeAll;
