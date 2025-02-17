@@ -582,6 +582,7 @@ namespace SotNData
 			{
 				if (original is null)
 					return null;
+				result.Type = TileTypes.Empty;
 				return result;
 			}
 			if (original is null)
@@ -626,7 +627,7 @@ namespace SotNData
 
 		public void Apply(ref MapTile mapTile)
 		{
-			if (!Type.HasValue)
+			if (Type == TileTypes.Empty)
 			{
 				mapTile = null;
 				return;
